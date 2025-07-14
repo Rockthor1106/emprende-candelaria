@@ -92,3 +92,6 @@ ipython_config.py
 node_modules/
 package-lock.json
 package.json
+
+# Media files uploaded by the users
+media/
