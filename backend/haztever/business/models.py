@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 
@@ -16,6 +17,6 @@ class BusinessProfile(models.Model):
     categories = models.ManyToManyField(Category, related_name='business_profiles')
     whatsapp = models.CharField(max_length=20)
     social_networks = models.JSONField(blank=True, null=True, verbose_name='Secondary social networks')
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
