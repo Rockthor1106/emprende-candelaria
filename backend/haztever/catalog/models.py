@@ -5,9 +5,10 @@ from haztever.business.models import BusinessProfile
 
 class ProductCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    business = models.ForeignKey(BusinessProfile, related_name='product_categories', on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.name
+        return f'{self.name} (de {self.business.business_name})'
 
 class Product(models.Model):
 

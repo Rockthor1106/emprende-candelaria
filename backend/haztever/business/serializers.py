@@ -15,7 +15,6 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
             'category',
             'whatsapp',
             'social_networks',
-            'user',
         ]
         
         read_only_fields = ['user']
