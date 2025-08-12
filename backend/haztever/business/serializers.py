@@ -1,8 +1,13 @@
 from rest_framework import serializers
+
 from .models import BusinessProfile
 from .models import BusinessCategory
 
+from haztever.catalog.serializers import ProductSerializer
+
 class BusinessProfileSerializer(serializers.ModelSerializer):
+    
+    products = ProductSerializer(many=True, read_only=True)
     
     class Meta:
         model = BusinessProfile
@@ -15,6 +20,7 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
             'category',
             'whatsapp',
             'social_networks',
+            'products'
         ]
         
         read_only_fields = ['user']
