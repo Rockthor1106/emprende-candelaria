@@ -97,3 +97,5 @@ package.json
 media/
 
 .secrets
+
+.DS_Store
