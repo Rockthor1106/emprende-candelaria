@@ -1,0 +1,33 @@
+#backend/serverless.yml
+
+service: emprende-candelaria-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: us-east-1
+  stage: dev
+
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!.env/**'
+    - '!.gitignore'
+    - '!.git/**'
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - httpApi: '*'
+    
+plugings:
+  - serverless-wsgi
+
+custom:
+  wsgi:
+    app: haztever.wsgi.application
+    packRequirements: false
