@@ -1,0 +1,30 @@
+# Django Core
+Django==5.2.4
+djangorestframework==3.16.0
+
+# Autenticación y usuarios
+django-allauth==0.58.2
+dj-rest-auth==7.0.1
+
+# AWS y Storage
+boto3==1.40.14
+django-storages==1.14.6
+
+# Documentación API
+drf-spectacular==0.28.0
+
+# Imágenes
+Pillow==11.3.0
+
+# Lambda WSGI
+serverless-wsgi==3.1.0
+
+# DRF Nested Routers
+drf-nested-routers==0.94.1
+
+# Base de datos
+psycopg2-binary==2.9.7
+sqlparse==0.5.3
+MarkupSafe==3.0.2
+Werkzeug==3.0.3
+asgiref==3.9.1
