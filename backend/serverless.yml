@@ -64,7 +64,7 @@ custom:
 
 functions:
   api:
-    handler: wsgi_handler.handler  # Cambiar temporalmente
+    handler: wsgi_handler.handler
     timeout: 30
     memorySize: 512
     events:
