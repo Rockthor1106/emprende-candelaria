@@ -28,3 +28,4 @@ sqlparse==0.5.3
 MarkupSafe==3.0.2
 Werkzeug==3.0.3
 asgiref==3.9.1
+dj-database-url==2.1

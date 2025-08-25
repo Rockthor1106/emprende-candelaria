@@ -1,11 +1,13 @@
 import os
+import dj_database_url
 from pathlib import Path
+import logging
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-simple-key-for-lambda')
 
-DEBUG = os.environ.get('DEBUG', False)
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'  
 
 ALLOWED_HOSTS = ['*']
 
@@ -73,20 +75,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'haztever.wsgi.application'
 
 if not DEBUG or IS_LAMBDA:
-    
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DB_NAME', 'postgres'),
-            'USER': os.environ.get('DB_USER', 'postgres'),
-            'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': os.environ.get('DB_HOST'),
-            'PORT': os.environ.get('DB_PORT', '5432'),
-            'OPTIONS': {
-                'connect_timeout': 10,
-            },
-        }
+        'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            conn_max_age=600,
+            ssl_require=True
+        )  
     }
+    
+    #En caso de querer usar aurora
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.postgresql',
+    #         'NAME': os.environ.get('DB_NAME', 'postgres'),
+    #         'USER': os.environ.get('DB_USER', 'postgres'),
+    #         'PASSWORD': os.environ.get('DB_PASSWORD'),
+    #         'HOST': os.environ.get('DB_HOST'),
+    #         'PORT': os.environ.get('DB_PORT', '5432'),
+    #         'OPTIONS': {
+    #             'connect_timeout': 10,
+    #         },
+    #     }
+    # }
     
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -154,8 +164,13 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'account_confirm_email'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'account_confirm_email'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -170,3 +185,61 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+# Configurar logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django.request": {"handlers": ["console"], "level": "ERROR"},
+        "django": {"handlers": ["console"], "level": "ERROR"},
+    },
+}
+
+# Email backend que loggea en lugar de enviar
+if IS_LAMBDA:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+    EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+    EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"] 
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
+    DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
+
+    # AGREGAR CONFIGURACIÓN DE SPECTACULAR PARA LAMBDA
+    SPECTACULAR_SETTINGS = {
+        'TITLE': 'Emprende Candelaria API',
+        'DESCRIPTION': 'API para la plataforma Emprende Candelaria',
+        'VERSION': '1.0.0',
+        'SERVE_INCLUDE_SCHEMA': False,
+        'SWAGGER_UI_SETTINGS': {
+            'deepLinking': True,
+            'persistAuthorization': True,
+        },
+        'SERVERS': [
+            {
+                'url': 'https://vwzm7uloyl.execute-api.us-east-1.amazonaws.com/dev',
+            }
+        ]
+    }
+    
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    
+    SPECTACULAR_SETTINGS = {
+        'TITLE': 'Emprende Candelaria API',
+        'DESCRIPTION': 'API para la plataforma Emprende Candelaria',
+        'VERSION': '1.0.0',
+        'SERVE_INCLUDE_SCHEMA': False,
+        'SWAGGER_UI_SETTINGS': {
+            'deepLinking': True,
+            'persistAuthorization': True,
+        },
+        'SERVERS': [
+            {
+                'url': 'http://127.0.0.1:8000',
+            }
+        ]
+    }

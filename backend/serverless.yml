@@ -9,20 +9,33 @@ provider:
   environment:
     DJANGO_SETTINGS_MODULE: haztever.settings
     DEBUG: "false"
-    DB_NAME: ${aws:ssm:/emprende-candelaria/dev/DB_NAME}
-    DB_USER: ${aws:ssm:/emprende-candelaria/dev/DB_USER}
-    DB_PASSWORD: ${aws:ssm:/emprende-candelaria/dev/DB_PASSWORD}   
-    DB_HOST: ${aws:ssm:/emprende-candelaria/dev/DB_HOST}
-    DB_PORT: "5432"
+    # Para aurora
+    # DB_NAME: ${aws:ssm:/emprende-candelaria/dev/DB_NAME}
+    # DB_USER: ${aws:ssm:/emprende-candelaria/dev/DB_USER}
+    # DB_PASSWORD: ${aws:ssm:/emprende-candelaria/dev/DB_PASSWORD}   
+    # DB_HOST: ${aws:ssm:/emprende-candelaria/dev/DB_HOST}
+    # DB_PORT: "5432"
+
+    #Neon database
+    DATABASE_URL: ${aws:ssm:/emprende-candelaria/dev/DATABASE_URL}
     SECRET_KEY: ${aws:ssm:/emprende-candelaria/dev/SECRET_KEY}
     AWS_STORAGE_BUCKET_NAME: ${aws:ssm:/emprende-candelaria/dev/AWS_STORAGE_BUCKET_NAME}
   
-  vpc:
-    securityGroupIds:
-      - sg-0acb15dc77c8a0f14
-    subnetIds:
-      - subnet-0b1289f34e539fb81
-      - subnet-023669c5a7f4a420d
+    #Email configuration
+    EMAIL_HOST: ${aws:ssm:/haztever/dev/EMAIL_HOST}
+    EMAIL_PORT: ${aws:ssm:/haztever/dev/EMAIL_PORT}
+    EMAIL_HOST_USER: ${aws:ssm:/haztever/dev/EMAIL_HOST_USER}
+    EMAIL_HOST_PASSWORD: ${aws:ssm:/haztever/dev/EMAIL_HOST_PASSWORD}  
+    DEFAULT_FROM_EMAIL: ${aws:ssm:/haztever/dev/DEFAULT_FROM_EMAIL}
+
+  # Para aurora
+  # vpc:
+    # securityGroupIds:
+    #   - sg-0acb15dc77c8a0f14
+    # subnetIds:
+    #   - subnet-0b1289f34e539fb81
+    #   - subnet-023669c5a7f4a420d
+
   iamRoleStatements:
     - Effect: Allow
       Action:
