@@ -175,6 +175,7 @@ ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'account_confirm_email'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 REST_AUTH = {
+    'LOGIN_SERIALIZER': 'haztever.users.serializers.CustomLoginSerializer',
     'REGISTER_SERIALIZER': 'haztever.users.serializers.CustomRegisterSerializer',
     'USER_DETAILS_SERIALIZER': 'haztever.users.serializers.CustomUserDetailsSerializer'
 }
