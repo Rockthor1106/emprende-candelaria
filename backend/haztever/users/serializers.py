@@ -21,7 +21,7 @@ class CustomRegisterSerializer(RegisterSerializer):
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + ('first_name', 'last_name')
-        
+        read_only_fields = UserDetailsSerializer.Meta.read_only_fields + ('username',)
 class CustomLoginSerializer(serializers.Serializer):
     username = None
     email = serializers.EmailField(required=True)
