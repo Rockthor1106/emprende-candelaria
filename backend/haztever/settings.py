@@ -86,19 +86,19 @@ if IS_LAMBDA:
     }
     
     # En caso de querer usar aurora
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DB_NAME', 'postgres'),
-            'USER': os.environ.get('DB_USER', 'postgres'),
-            'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': os.environ.get('DB_HOST'),
-            'PORT': os.environ.get('DB_PORT', '5432'),
-            'OPTIONS': {
-                'connect_timeout': 10,
-            },
-        }
-    }
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.postgresql',
+    #         'NAME': os.environ.get('DB_NAME', 'postgres'),
+    #         'USER': os.environ.get('DB_USER', 'postgres'),
+    #         'PASSWORD': os.environ.get('DB_PASSWORD'),
+    #         'HOST': os.environ.get('DB_HOST'),
+    #         'PORT': os.environ.get('DB_PORT', '5432'),
+    #         'OPTIONS': {
+    #             'connect_timeout': 10,
+    #         },
+    #     }
+    # }
     
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -189,7 +189,6 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# Configurar logging
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -200,7 +199,6 @@ LOGGING = {
     },
 }
 
-# Email backend que loggea en lugar de enviar
 if IS_LAMBDA:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
@@ -211,7 +209,6 @@ if IS_LAMBDA:
     EMAIL_USE_SSL = False
     DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 
-    # AGREGAR CONFIGURACIÓN DE SPECTACULAR PARA LAMBDA
     SPECTACULAR_SETTINGS = {
         'TITLE': 'Emprende Candelaria API',
         'DESCRIPTION': 'API para la plataforma Emprende Candelaria',
