@@ -76,7 +76,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'haztever.wsgi.application'
 
-if IS_LAMBDA:
+if IS_LAMBDA or not DEBUG:
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ.get('DATABASE_URL'),
@@ -208,38 +208,22 @@ if IS_LAMBDA:
     EMAIL_USE_TLS = True
     EMAIL_USE_SSL = False
     DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
-
-    SPECTACULAR_SETTINGS = {
-        'TITLE': 'Emprende Candelaria API',
-        'DESCRIPTION': 'API para la plataforma Emprende Candelaria',
-        'VERSION': '1.0.0',
-        'SERVE_INCLUDE_SCHEMA': False,
-        'SWAGGER_UI_SETTINGS': {
-            'deepLinking': True,
-            'persistAuthorization': True,
-        },
-        'SERVERS': [
-            {
-                'url': HOST,
-            }
-        ]
-    }
     
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     
-    SPECTACULAR_SETTINGS = {
-        'TITLE': 'Emprende Candelaria API',
-        'DESCRIPTION': 'API para la plataforma Emprende Candelaria',
-        'VERSION': '1.0.0',
-        'SERVE_INCLUDE_SCHEMA': False,
-        'SWAGGER_UI_SETTINGS': {
-            'deepLinking': True,
-            'persistAuthorization': True,
-        },
-        'SERVERS': [
-            {
-                'url': 'http://127.0.0.1:8000',
-            }
-        ]
-    }
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Emprende Candelaria API',
+    'DESCRIPTION': 'API para la plataforma Emprende Candelaria',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+    },
+    'SERVERS': [
+        {
+            'url': HOST,
+        }
+    ]
+}

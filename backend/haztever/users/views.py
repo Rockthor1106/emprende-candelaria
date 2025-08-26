@@ -21,8 +21,10 @@ class CustomConfirmEmailView(ConfirmEmailView):
         try:
             if  settings.IS_LAMBDA:
                 base_url = settings.HOST
+                platform_url = base_url
             else:
                 base_url = 'http://127.0.0.1:8000'
+                platform_url = base_url
             
             verify_url = f"{base_url}/api/auth/registration/verify-email/"
             
@@ -35,7 +37,8 @@ class CustomConfirmEmailView(ConfirmEmailView):
                     {
                         'success': True,
                         'message': '¡Tu email ha sido verificado exitosamente! Ya puedes usar tu cuenta.',
-                        'user': request.user if request.user.is_authenticated else None
+                        'user': request.user if request.user.is_authenticated else None,
+                        'platform_url': platform_url
                     }
                 )
             else:
@@ -44,7 +47,8 @@ class CustomConfirmEmailView(ConfirmEmailView):
                     'account/email_confirmed.html',
                     {
                         'success': False,
-                        'message': 'El enlace de confirmación es inválido o ha expirado. Por favor, solicita un nuevo enlace.'
+                        'message': 'El enlace de confirmación es inválido o ha expirado. Por favor, solicita un nuevo enlace.',
+                        'platform_url': platform_url
                     }
                 )
                 
@@ -54,6 +58,7 @@ class CustomConfirmEmailView(ConfirmEmailView):
                 'account/email_confirmed.html',
                 {
                     'success': False,
-                    'message': 'Hubo un error al verificar tu email. Por favor, inténtalo de nuevo más tarde.'
+                    'message': 'Hubo un error al verificar tu email. Por favor, inténtalo de nuevo más tarde.',
+                    'platform_url': platform_url
                 }
             )
