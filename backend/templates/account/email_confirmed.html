@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if success %}Confirmación Exitosa{% else %}Error de Confirmación{% endif %} - Emprende Candelaria</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        .success-icon {
+            font-size: 4rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: #f44336;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if success %}
+            <div class="success-icon">✅</div>
+            <h1>¡Confirmación Exitosa!</h1>
+            <p>{{ message }}</p>
+            {% if user %}
+                <p>Bienvenido a <strong>Emprende Candelaria</strong>, {{ user.first_name }}.</p>
+            {% else %}
+                <p>¡Bienvenido a <strong>Emprende Candelaria</strong>!</p>
+            {% endif %}
+            <a href="/" class="btn">Ir a la Plataforma</a>
+            
+            <script>
+                setTimeout(function() {
+                    window.location.href = '/';
+                }, 5000);
+            </script>
+        {% else %}
+            <div class="error-icon">❌</div>
+            <h1>Error de Confirmación</h1>
+            <p>{{ message|default:"El enlace de confirmación es inválido o ha expirado." }}</p>
+            <a href="/api/auth/registration/" class="btn">Solicitar Nuevo Enlace</a>
+        {% endif %}
+    </div>
+</body>
+</html>

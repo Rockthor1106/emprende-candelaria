@@ -9,6 +9,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-simple-key-for-lambda
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'  
 
+HOST = os.environ.get('HOST', 'http://127.0.0.1:8000')
+
 ALLOWED_HOSTS = ['*']
 
 IS_LAMBDA = os.environ.get('AWS_EXECUTION_ENV') is not None
@@ -60,7 +62,7 @@ ROOT_URLCONF = 'haztever.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,14 +76,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'haztever.wsgi.application'
 
-if not DEBUG or IS_LAMBDA:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL'),
-            conn_max_age=600,
-            ssl_require=True
-        )  
-    }
+# if not DEBUG or IS_LAMBDA:
+#     DATABASES = {
+#         'default': dj_database_url.config(
+#             default=os.environ.get('DATABASE_URL'),
+#             conn_max_age=600,
+#             ssl_require=True
+#         )  
+#     }
     
     #En caso de querer usar aurora
     # DATABASES = {
@@ -98,37 +100,37 @@ if not DEBUG or IS_LAMBDA:
     #     }
     # }
     
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
-    AWS_SIGNATURE_VERSION = 's3v4'
-    AWS_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+#     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+#     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+#     AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+#     AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
+#     AWS_SIGNATURE_VERSION = 's3v4'
+#     AWS_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     
-    STATIC_URL = f'https://{AWS_CUSTOM_DOMAIN}/static/'
-    MEDIA_URL = f'https://{AWS_CUSTOM_DOMAIN}/media/'
+#     STATIC_URL = f'https://{AWS_CUSTOM_DOMAIN}/static/'
+#     MEDIA_URL = f'https://{AWS_CUSTOM_DOMAIN}/media/'
     
-    STORAGES = {
-        "default": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        },
-        "staticfiles": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        },
+#     STORAGES = {
+#         "default": {
+#             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+#         },
+#         "staticfiles": {
+#             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+#         },
+#     }
+    
+# else:
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-    
-    STATIC_URL = '/static/'
-    STATIC_ROOT = BASE_DIR / 'staticfiles'
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+}
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -221,7 +223,7 @@ if IS_LAMBDA:
         },
         'SERVERS': [
             {
-                'url': 'https://vwzm7uloyl.execute-api.us-east-1.amazonaws.com/dev',
+                'url': HOST,
             }
         ]
     }

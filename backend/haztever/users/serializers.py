@@ -1,3 +1,4 @@
+from dj_rest_auth.serializers import LoginSerializer
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
@@ -22,7 +23,8 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + ('first_name', 'last_name')
         read_only_fields = UserDetailsSerializer.Meta.read_only_fields + ('username',)
-class CustomLoginSerializer(serializers.Serializer):
+
+class CustomLoginSerializer(LoginSerializer):
     username = None
     email = serializers.EmailField(required=True)
     password = serializers.CharField(style={'input_type': 'password'})
