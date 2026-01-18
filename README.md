@@ -3,8 +3,6 @@
 
 **Una plataforma diseñada para conectar a los emprendedores de Candelaria, Valle del Cauca, con sus clientes, impulsando la economía local a través de la tecnología.**
 
-[Link al Demo del Frontend] · [Link a la Documentación de la API]
-
 ---
 
 ## 1. El Problema
